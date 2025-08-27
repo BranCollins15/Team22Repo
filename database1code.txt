@@ -1,3 +1,7 @@
+-- Create Database
+CREATE DATABASE Database1;
+USE Database1;
+
 -- Drop old tables if they exist
 DROP TABLE IF EXISTS Contacts;
 DROP TABLE IF EXISTS Users;
