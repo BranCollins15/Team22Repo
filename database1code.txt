@@ -1,0 +1,77 @@
+-- Drop old tables if they exist
+DROP TABLE IF EXISTS Contacts;
+DROP TABLE IF EXISTS Users;
+
+-- Create Users table
+CREATE TABLE Users (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    DateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DateLastLoggedIn DATETIME NULL,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Login VARCHAR(100) UNIQUE NOT NULL,
+    PasswordHash VARCHAR(255) NOT NULL
+);
+
+-- Create Contacts table
+CREATE TABLE Contacts (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Email VARCHAR(150),
+    Phone VARCHAR(50),
+    Address VARCHAR(255),
+    Notes TEXT,
+    DateCreated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    DateModified DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(ID) ON DELETE CASCADE
+);
+
+-- Insert sample Users
+INSERT INTO Users (FirstName, LastName, Login, PasswordHash) VALUES
+('Alice', 'Johnson', 'alicej', 'hashed_pw1'),
+('Bob', 'Smith', 'bobsmith', 'hashed_pw2'),
+('Charlie', 'Brown', 'charlieb', 'hashed_pw3'),
+('Diana', 'Evans', 'dianae', 'hashed_pw4'),
+('Ethan', 'Williams', 'ethanw', 'hashed_pw5');
+
+-- Insert Contacts for Alice (UserID = 1)
+INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone, Address, Notes) VALUES
+(1, 'Emily', 'Clark', 'emily.clark@email.com', '555-101-1111', '123 Main St, Orlando, FL', 'College friend'),
+(1, 'David', 'Miller', 'david.miller@email.com', '555-101-1112', '456 Oak St, Tampa, FL', 'Work colleague'),
+(1, 'Sophia', 'Green', 'sophia.green@email.com', '555-101-1113', '789 Pine St, Miami, FL', 'Neighbor'),
+(1, 'James', 'Harris', 'james.harris@email.com', '555-101-1114', '321 Elm St, Daytona, FL', 'Cousin'),
+(1, 'Olivia', 'Moore', 'olivia.moore@email.com', '555-101-1115', '654 Cedar St, Kissimmee, FL', 'Book club');
+
+-- Insert Contacts for Bob (UserID = 2)
+INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone, Address, Notes) VALUES
+(2, 'Michael', 'Anderson', 'michael.anderson@email.com', '555-202-2221', '101 Maple St, Jacksonville, FL', 'Neighbor'),
+(2, 'Laura', 'Hall', 'laura.hall@email.com', '555-202-2222', '202 Birch St, Tallahassee, FL', 'Old classmate'),
+(2, 'Daniel', 'Lewis', 'daniel.lewis@email.com', '555-202-2223', '303 Cedar St, Gainesville, FL', 'Gym buddy'),
+(2, 'Emma', 'Young', 'emma.young@email.com', '555-202-2224', '404 Walnut St, St. Augustine, FL', 'Work mentor'),
+(2, 'Ryan', 'King', 'ryan.king@email.com', '555-202-2225', '505 Spruce St, Ocala, FL', 'Family friend');
+
+-- Insert Contacts for Charlie (UserID = 3)
+INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone, Address, Notes) VALUES
+(3, 'Olivia', 'Martin', 'olivia.martin@email.com', '555-303-3331', '111 Lakeview Dr, Sanford, FL', 'Soccer teammate'),
+(3, 'Ethan', 'Walker', 'ethan.walker@email.com', '555-303-3332', '222 Riverview Rd, Apopka, FL', 'Neighbor'),
+(3, 'Grace', 'Allen', 'grace.allen@email.com', '555-303-3333', '333 Park Ave, Winter Park, FL', 'Church friend'),
+(3, 'Henry', 'Baker', 'henry.baker@email.com', '555-303-3334', '444 College St, Orlando, FL', 'Study group'),
+(3, 'Ava', 'Turner', 'ava.turner@email.com', '555-303-3335', '555 Broadway Ave, Deltona, FL', 'High school friend');
+
+-- Insert Contacts for Diana (UserID = 4)
+INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone, Address, Notes) VALUES
+(4, 'Jacob', 'Perez', 'jacob.perez@email.com', '555-404-4441', '101 Sunset Blvd, Clermont, FL', 'Co-worker'),
+(4, 'Mia', 'Carter', 'mia.carter@email.com', '555-404-4442', '202 Sunrise Ln, Lakeland, FL', 'Neighbor'),
+(4, 'Noah', 'Cook', 'noah.cook@email.com', '555-404-4443', '303 Meadow St, Ocala, FL', 'Childhood friend'),
+(4, 'Lily', 'Rogers', 'lily.rogers@email.com', '555-404-4444', '404 Willow Way, Leesburg, FL', 'College roommate'),
+(4, 'Lucas', 'Ward', 'lucas.ward@email.com', '555-404-4445', '505 Garden Ave, Melbourne, FL', 'Book club');
+
+-- Insert Contacts for Ethan (UserID = 5)
+INSERT INTO Contacts (UserID, FirstName, LastName, Email, Phone, Address, Notes) VALUES
+(5, 'Zoe', 'Price', 'zoe.price@email.com', '555-505-5551', '111 Harbor Dr, Daytona, FL', 'Surfing buddy'),
+(5, 'Mason', 'Ross', 'mason.ross@email.com', '555-505-5552', '222 Ocean Blvd, Cocoa Beach, FL', 'Neighbor'),
+(5, 'Ella', 'Reed', 'ella.reed@email.com', '555-505-5553', '333 Palm St, West Palm Beach, FL', 'Work colleague'),
+(5, 'Jack', 'Bell', 'jack.bell@email.com', '555-505-5554', '444 Coral Way, Key West, FL', 'Vacation friend'),
+(5, 'Chloe', 'Gray', 'chloe.gray@email.com', '555-505-5555', '555 Seaside Ave, Naples, FL', 'Cousin');
