@@ -13,7 +13,7 @@
 	} 
 	else
 	{
-		$stmt = $conn->prepare("INSERT into Users (FirstName, LastName, Login, PasswordHash) VALUES(?,?,?,?)");
+		$stmt = $conn->prepare("INSERT IGNORE into Users (FirstName, LastName, Login, PasswordHash) VALUES(?,?,?,?)");
 		$stmt->bind_param("ssss", $firstName, $lastName, $login, $passwordHash);
 		$stmt->execute();
 		$stmt->close();
