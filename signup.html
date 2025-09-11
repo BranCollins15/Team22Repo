@@ -1,6 +1,7 @@
 
 <html>
     <head>
+        <script type="text/javascript" src="js/doRegister.js"></script>
         <link rel="stylesheet" href="css/styles.css" />
     </head>
     
@@ -17,7 +18,8 @@
         <label for="password">Password:</label><br>
         <input type="text" id="password" name="password">
 
-        <input type="submit" value = "Submit">
+        <button type="button" id="registerButton" class="buttons" onclick="doRegister();"> Do It </button>
+        <span id="registerResult"></span>
         <a link href="index.html"> Already have an account? </a>
     </form>
 </html>
