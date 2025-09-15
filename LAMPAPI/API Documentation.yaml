@@ -1,0 +1,290 @@
+swagger: '2.0'
+info:
+  description: This is the API documentation for the COP 4331 Small Project
+  version: 1.0.0
+  title: The Small Project
+  # put the contact info for your development or API team
+  contact:
+    email: da747546@ucf.edu
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  /Login.php:
+    post:
+      tags:
+      - Users
+      summary: Logs in to the small project
+      operationId: doLogin
+      description: Logs in to the small project
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: loginItem
+        description: Login
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        200:
+          description: OK
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error
+  /SignUp.php:
+    post:
+      tags:
+      - Users
+      summary: Logs in to the small project
+      operationId: doSignUp
+      description: Logs in to the small project
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: signUpItem
+        description: SignUp
+        schema:
+          $ref: '#/definitions/SignUp'
+      responses:
+        200:
+          description: OK
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error
+  /AddContact.php:
+    post:
+      tags:
+      - Contacts
+      summary: Adds a contact
+      operationId: addContact
+      description: Adds a contact to the simple project database
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: contactItem
+        description: Contact
+        schema:
+          $ref: '#/definitions/Contact2'
+      responses:
+        200:
+          description: OK
+        404:
+          description: URL Not Found 
+        500:
+          description: Server Error
+  /UpdateContacts.php:
+    post:
+      tags:
+      - Contacts
+      summary: Updates a contact
+      operationId: updateContact
+      description: Updates a contact to the simple project database
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: contactItem
+        description: Contact
+        schema:
+          $ref: '#/definitions/Contact1'
+      responses:
+        200:
+          description: OK
+        404:
+          description: URL Not Found 
+        500:
+          description: Server Error
+  /DeleteContacts.php:
+    post:
+      tags:
+      - Contacts
+      summary: Deletes a contact
+      operationId: deleteContact
+      description: Deletes a contact to the simple project database
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: deleteItem
+        description: Delete Contact
+        schema:
+          $ref: '#/definitions/Delete'
+      responses:
+        200:
+          description: OK
+        404:
+          description: URL Not Found 
+        500:
+          description: Server Error
+  /SearchContacts.php:
+    post:
+      tags:
+      - Search
+      summary: Searches contacts
+      operationId: searchContact
+      description: Searches contacts from the small project database
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: searchItem
+        description: Contact Search
+        schema:
+          $ref: '#/definitions/Search'
+      responses:
+        200:
+          description: OK
+        404:
+          description: URL Not Found
+        500:
+          description: Server Error
+          
+definitions:
+  Login:
+    type: object
+    required:
+    - login
+    - passwordHash
+    properties:
+      login:
+        type: string
+        example: "drew"
+      passwordHash:
+        type: string
+        example: "password"
+  SignUp:
+    type: object
+    required:
+    - firstName
+    - lastName
+    - login
+    - passwordHash
+    properties:
+      firstName:
+        type: string
+        example: "Drew"
+      lastName:
+        type: string
+        example: "Greene"
+      login:
+        type: string
+        example: "drew"
+      passwordHash:
+        type: string
+        example: "password"
+  Contact1:
+    type: object
+    required:
+    - userId
+    - contactId
+    - firstName
+    - lastName
+    - email
+    - phone
+    - address
+    - notes
+    properties:
+      userId:
+        type: integer
+        example: 1
+      contactId:
+        type: integer
+        example: 2
+      firstName:
+        type: string
+        example: "Drew"
+      lastName:
+        type: string
+        example: "Greene"
+      email:
+        type: string
+        example: "drew.greene@email.com"
+      phone:
+        type: string
+        example: "100-200-3000"
+      address:
+        type: string
+        example: "4000 Freedom Street, Apopka, FL"
+      notes:
+        type: string
+        example: "Researcher"
+  Contact2:
+    type: object
+    required:
+    - userId
+    - firstName
+    - lastName
+    - email
+    - phone
+    - address
+    - notes
+    properties:
+      userId:
+        type: integer
+        example: 1
+      firstName:
+        type: string
+        example: "Drew"
+      lastName:
+        type: string
+        example: "Greene"
+      email:
+        type: string
+        example: "drew.greene@email.com"
+      phone:
+        type: string
+        example: "100-200-3000"
+      address:
+        type: string
+        example: "4000 Freedom Street, Apopka, FL"
+      notes:
+        type: string
+        example: "Researcher"
+  Search:
+    type: object
+    required:
+    - userId
+    - search
+    properties:
+      userId:
+        type: integer
+        example: 1
+      search:
+        type: string
+        example: "a"
+  Delete:
+    type: object
+    required:
+    - userId
+    - contactId
+    properties:
+      userId:
+        type: integer
+        example: 1
+      search:
+        type: integer
+        example: 2
+
+
+host: smallproject.shop
+basePath: /LAMPAPI
+schemes:
+- http
