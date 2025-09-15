@@ -60,7 +60,7 @@ paths:
           description: URL Not Found
         500:
           description: Server Error
-  /AddContact.php:
+  /AddContacts.php:
     post:
       tags:
       - Contacts
@@ -162,12 +162,12 @@ definitions:
     type: object
     required:
     - login
-    - passwordHash
+    - passwordH
     properties:
       login:
         type: string
         example: "drew"
-      passwordHash:
+      password:
         type: string
         example: "password"
   SignUp:
@@ -279,7 +279,7 @@ definitions:
       userId:
         type: integer
         example: 1
-      search:
+      contactId:
         type: integer
         example: 2
 
