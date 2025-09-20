@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html> 
     <head>
+        <script type="text/javascript" src="js/doLogin.js"></script>
         <link rel="stylesheet" href="css/styles.css" />
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     </head>
 
-    <body class = "login page">
-        <h5>
-            you have successfully logged in!
-        </h5>
-    </body>
-      
+    <body>
+
+        <h1 id="title">Welcome!</h1>
+        
+        <div id="accessUIDiv">
+            <br />
+        
+            <input type="text" id="searchText" placeholder="Search Contact"/>
+            <button type="button" id="searchContactButton" class="buttons" onclick="searchContact();"> Search Contact </button><br />
+            <span id="contactSearchResult"></span>
+            <p id="contactList">
+            </p><br /><br />
+        
+            <button type="button" id="AddContactForm" class="buttons" onclick="Form();"> Add Contact</button>
+
+            <div id="contactForm" style="display: none; margin-top:10px">
+                <input type="text" id="firstnameText" placeholder="First Name">
+                <input type="text" id="lastnameText" placeholder="Last Name">
+                <input type="text" id="emailText" placeholder="Email">
+                <input type="text" id="phoneText" placeholder="Phone Number">
+                <button type="button" id="addContactButton" class="buttons" onclick="addContact();"> Submit </button><br />
+                <span id="contactAddResult"></span>
+            </div>
+            <div id="contactList"></div>
+
+        </div>
+
+        <div id="loggedInDiv">
+            <span id="userName"></span><br />
+            <button type="button" id="logoutButton" class="buttons" onclick="doLogout();"> Log Out </button>
+        </div>
+        
+        </body>
+        </html>
 </html>
