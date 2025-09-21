@@ -117,11 +117,42 @@ function addContact()
 	let lastname = document.getElementById("lastnameText").value;
 	let email = document.getElementById("emailText").value;
 	let phone = document.getElementById("phoneText").value;
+	let address = document.getElementById("addressText").value;
+	let notes = document.getElementById("notesText").value;
 
-	let tmp = {firstName: firstname, lastName: lastname, email: email, phone: phone, userId: userId};
+	if(firstname === "")
+	{
+		document.getElementById("contactAddResult").innerHTML = "required field";
+		return;
+	}
+	if(lastname === "")
+	{
+		document.getElementById("contactAddResult").innerHTML = "required field";
+		return;
+	}
+	if(email === "")
+	{
+		document.getElementById("contactAddResult").innerHTML = "required field";
+		return;
+	}
+	if(phone === "")
+	{
+		document.getElementById("contactAddResult").innerHTML = "required field";
+		return;
+	}
+	if(phone.length !== 12)
+	{
+		document.getElementById("contactAddResult").innerHTML = "required field";
+		return;
+	}
+	// add if check to make sure the format matches XXX-XXX-XXXX
+	// also add if check to make sure email has @
+
+	//console.log("UserId:", userId);
+	let tmp = {firstName: firstname, lastName: lastname, email: email, phone: phone, address: address, notes: notes, userId: userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/AddContact.' + extension;
+	let url = urlBase + '/AddContacts.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -132,7 +163,14 @@ function addContact()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				console.log("hello");
+				let jsonObject = JSON.parse( xhr.responseText );
+				// userId = jsonObject.id;
+		
+				if( jsonObject.error !== "" )
+				{		
+					document.getElementById("contactAddResult").innerHTML = "contact couldn't be added";
+					return;
+				}
 				document.getElementById("contactAddResult").innerHTML = "Contact has been added";
 			}
 		};
@@ -170,8 +208,8 @@ function searchContact()
 				
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-
-					contactList += jsonObject.results[i];
+					let contactDisplay = jsonObject.results[i].FirstName + " " + jsonObject.results[i].LastName;
+					contactList += contactDisplay;
 					if( i < jsonObject.results.length - 1 )
 					{
 						contactList += "<br />\r\n";
@@ -190,15 +228,19 @@ function searchContact()
 	
 }
 
-function deleteContact()
+function deleteContact(contactid)
 {
 	let deleteContact = document.getElementById("contactText").value;
 	document.getElementById("contactDeleteResult").innerHTML = "";
 
-	let tmp = {id:userId,userId:userId};
+	let tmp = {id:contactid,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/DeleteContact.' + extension;
+	if(!confirm("are you sure you want to delete this contact?"))
+	{
+		return;
+	}
+	let url = urlBase + '/DeleteContacts.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -209,6 +251,13 @@ function deleteContact()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
+				let jsonObject = JSON.parse(xhr.responseText);
+
+				if(jsonObject.error !== "")
+				{
+					document.getElementById("contactDeleteResult").innerHTML = "Contact couldn't be deleted.";
+					return;
+				}
 				document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
 			}
 		};
@@ -220,7 +269,7 @@ function deleteContact()
 	}
 }
 
-function updateContact()
+/* function updateContact()
 {
 	let updateContact = document.getElementById("updateContactText").value;
 	//document.getElementById("contactAddResult").innerHTML = "";
@@ -263,7 +312,7 @@ function updateContact()
 window.onload = function()
 {
 	searchContact(true);
-}
+}*/
 
 function Form()
 {
