@@ -17,8 +17,8 @@
             <input type="text" id="searchText" placeholder="Search Contact"/>
             <button type="button" id="searchContactButton" class="buttons" onclick="searchContact();"> Search Contact </button><br />
             <span id="contactSearchResult"></span>
-            <p id="contactList">
-            </p><br /><br />
+            
+            <div id="contactListDisplay" style ="margin-top: 20px;"></div>
         
             <button type="button" id="AddContactForm" class="buttons" onclick="Form();"> Add Contact</button>
 
@@ -29,11 +29,28 @@
                 <input type="text" id="phoneText" placeholder="Phone Number">
                 <input type="text" id="addressText" placeholder="Address">
                 <input type="text" id="notesText" placeholder="Notes">
-                <button type="button" id="addContactButton" class="buttons" onclick="addContact();"> Submit </button><br />
-                <span id="contactAddResult"></span>
-            </div>
-            <div id="contactList"></div>
 
+                <button type="button" id="addContactButton" class="buttons" onclick="addContact();"> Submit </button><br />
+            
+                <span id="contactAddResult"></span>
+                <span id="contactUpdateResult"></span>
+            </div>
+
+            <div id="updateContactForm" style="display: none; margin-top:10px">
+                <input type="text" id="updatefirstnameText" placeholder="First Name">
+                <input type="text" id="updatelastnameText" placeholder="Last Name">
+                <input type="text" id="updateemailText" placeholder="Email">
+                <input type="text" id="updatephoneText" placeholder="Phone Number">
+                <input type="text" id="updateaddressText" placeholder="Address">
+                <input type="text" id="updatenotesText" placeholder="Notes">
+
+                <input type="hidden" id="updateContactId" />
+
+                <button type="button" id="updateContactButton" class="buttons" onclick="updateContact();"> Submit </button><br />
+            
+                <span id="contactAddResult"></span>
+                <span id="contactUpdateResult"></span>
+            </div>
         </div>
 
         <div id="loggedInDiv">

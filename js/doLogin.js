@@ -206,17 +206,37 @@ function searchContact()
 				document.getElementById("contactSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 				
+				if( jsonObject.error !== "" )
+					{		
+						document.getElementById("contactSearchResult").innerHTML = "contact couldn't be found";
+						return;
+					}
+
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-					let contactDisplay = jsonObject.results[i].FirstName + " " + jsonObject.results[i].LastName;
-					contactList += contactDisplay;
-					if( i < jsonObject.results.length - 1 )
-					{
-						contactList += "<br />\r\n";
-					}
+					
+				let contact = jsonObject.results[i];
+				let contactId = contact.ContactID; // adjust key if needed
+				
+				let contactDisplay = `
+					<div class="contact-entry" id="contact-${contactId}" style="margin-bottom:10px;">
+						<strong>${contact.FirstName} ${contact.LastName}</strong><br />
+						Email: ${contact.Email}<br />
+						Phone: ${contact.Phone}<br />
+						Address: ${contact.Address}<br />
+						Notes: ${contact.Notes}<br />
+						<button onclick="deleteContact(${contactId})">Delete</button>
+						<button onclick="prefillForm(${contactId}, '${contact.FirstName}', '${contact.LastName}', '${contact.Email}', '${contact.Phone}', '${contact.Address}', '${contact.Notes}')">Update</button>
+					</div>
+				`;
+				contactList += contactDisplay;
+			
+
+				document.getElementById("contactListDisplay").innerHTML = contactList;
+
 				}
 				
-				document.getElementsByTagName("p")[0].innerHTML = contactList;
+				//document.getElementsByTagName("p")[0].innerHTML = contactList;
 			}
 		};
 		xhr.send(jsonPayload);
@@ -230,10 +250,10 @@ function searchContact()
 
 function deleteContact(contactid)
 {
-	let deleteContact = document.getElementById("contactText").value;
-	document.getElementById("contactDeleteResult").innerHTML = "";
+	// let deleteContact = document.getElementById("contactText").value;
+	// document.getElementById("contactDeleteResult").innerHTML = "";
 
-	let tmp = {id:contactid,userId:userId};
+	let tmp = {contactId:contactid,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
 	if(!confirm("are you sure you want to delete this contact?"))
@@ -255,10 +275,15 @@ function deleteContact(contactid)
 
 				if(jsonObject.error !== "")
 				{
-					document.getElementById("contactDeleteResult").innerHTML = "Contact couldn't be deleted.";
+					//document.getElementById("contactDeleteResult").innerHTML = "Contact couldn't be deleted.";
 					return;
 				}
-				document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
+
+				let contactDiv = document.getElementById("contact-" + contactid);
+				if (contactDiv) {
+					contactDiv.remove();
+				}
+				//document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -269,24 +294,48 @@ function deleteContact(contactid)
 	}
 }
 
-/* function updateContact()
-{
-	let updateContact = document.getElementById("updateContactText").value;
-	//document.getElementById("contactAddResult").innerHTML = "";
-	 if(!updateContact) return;
+function prefillForm(id, firstName, lastName, email, phone, address, notes) {
+	document.getElementById("updatefirstnameText").value = firstName;
+	document.getElementById("updatelastnameText").value = lastName;
+	document.getElementById("updateemailText").value = email;
+	document.getElementById("updatephoneText").value = phone;
+	document.getElementById("updateaddressText").value = address;
+	document.getElementById("updatenotesText").value = notes;
 
+	// Show the form if hidden
+	document.getElementById("updateContactForm").style.display = "block";
+
+	// Optionally store the contact ID in a hidden field
+	document.getElementById("updateContactId").value = id;
+}
+
+
+function updateContact()
+{
+	//let updateContact = document.getElementById("updateContactText").value;
+	//document.getElementById("contactAddResult").innerHTML = "";
+	//if(!updateContact) return;
+	/*if(!contactid) 
+	{
+		document.getElementById("contactUpdateResult").innerHTML = "Missing contact ID.";
+		return;
+	}*/
 	
 	let data = {
-		firstname : document.getElementById("firstnameText").value,
-		lastname : document.getElementById("lastnameText").value,
-		email : document.getElementById("emailText").value,
-		phone : document.getElementById("phoneText").value,
+		firstName : document.getElementById("updatefirstnameText").value,
+		lastName : document.getElementById("updatelastnameText").value,
+		email : document.getElementById("updateemailText").value,
+		phone : document.getElementById("updatephoneText").value,
+		address : document.getElementById("updateaddressText").value,
+		notes : document.getElementById("updatenotesText").value,
+		userId : userId,
+		contactId : document.getElementById("updateContactId").value
 	}
 
 	//let tmp = {firstname: firstname, lastname: lastname, email: email, phone: phone};
-	let jsonPayload = JSON.stringify( tmp );
+	let jsonPayload = JSON.stringify( data );
 
-	let url = urlBase + '/UpdateContact.' + extension;
+	let url = urlBase + '/UpdateContacts.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -297,8 +346,17 @@ function deleteContact(contactid)
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				//document.getElementById("contactAddResult").innerHTML = "Contact has been added";
-				searchContact();
+				let jsonObject = JSON.parse(xhr.responseText);
+
+				if(jsonObject.error !== "")
+				{
+					document.getElementById("contactUpdateResult").innerHTML = "Contact couldn't be updated.";
+					return;
+				}
+				document.getElementById("contactUpdateResult").innerHTML = "Contact has been updated";
+				searchContact(); 
+
+				document.getElementById("updateContactForm").style.display = "none";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -309,12 +367,14 @@ function deleteContact(contactid)
 	}
 }
 
-window.onload = function()
-{
-	searchContact(true);
-}*/
-
 function Form()
 {
-	document.getElementById("contactForm").style.display = "block";
+	if(document.getElementById("contactForm").style.display === "block")
+	{
+		document.getElementById("contactForm").style.display = "none";
+	} 
+	else 
+	{
+		document.getElementById("contactForm").style.display = "block";
+	}
 }
