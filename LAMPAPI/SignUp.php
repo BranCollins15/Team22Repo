@@ -17,8 +17,7 @@
 		$stmt->bind_param("ssss", $firstName, $lastName, $login, $passwordHash);
 		$stmt->execute();
 		if(($conn->affected_rows) == 0){
-			echo "User not created.";
-			echo "\n";
+			die("Error: Username Taken");
 		}
 		$stmt->close();
 		$conn->close();
