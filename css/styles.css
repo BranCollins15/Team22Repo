@@ -345,11 +345,11 @@ button:active {
 
 /* Input validation styles */
 input:invalid {
-    border-color: #f44336;
+    border-color: #0074d9;
 }
 
 input:valid {
-    border-color: #4caf50;
+    border-color: #0074d9;
 }
 
 .input-error {
@@ -438,7 +438,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 /* Landing page body tweaks */
 .landing-page {
