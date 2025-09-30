@@ -1,63 +1,105 @@
 <!DOCTYPE html>
-<html> 
-    <head>
-        <script type="text/javascript" src="js/doLogin.js"></script>
-        <script type="text/javascript" src="js/landingpage.js"></script>
-        <link rel="stylesheet" href="css/styles.css" />
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-    </head>
+<html lang="en">
 
-    <body>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ocean Contact Manager</title>
 
-        <h1 id="title">Welcome!</h1>
-        
-        <div id="accessUIDiv">
-            <br />
-        
-            <input type="text" id="searchText" placeholder="Search Contact"/>
-            <button type="button" id="searchContactButton" class="buttons" onclick="searchContact();"> Search Contact </button><br />
-            <span id="contactSearchResult"></span>
-            
-            <div id="contactListDisplay" style ="margin-top: 20px;"></div>
-        
-            <button type="button" id="AddContactForm" class="buttons" onclick="Form();"> Add Contact</button>
+    <!-- Scripts -->
+    <script type="text/javascript" src="js/doLogin.js"></script>
+    <script type="text/javascript" src="js/landingpage.js"></script>
+    
+    <!-- Fonts & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
 
-            <div id="contactForm" style="display: none; margin-top:10px">
-                <input type="text" id="firstnameText" placeholder="First Name">
-                <input type="text" id="lastnameText" placeholder="Last Name">
-                <input type="text" id="emailText" placeholder="Email">
-                <input type="text" id="phoneText" placeholder="Phone Number">
-                <input type="text" id="addressText" placeholder="Address">
-                <input type="text" id="notesText" placeholder="Notes">
+<body class="landing-page">
+    <a href="#accessUIDiv" class="skip-link">Skip to main content</a>
 
-                <button type="button" id="addContactButton" class="buttons" onclick="addContact();"> Submit </button><br />
-            
-                <span id="contactAddResult"></span>
-                <span id="contactUpdateResult"></span>
-            </div>
+    <div class="container">
+        <h1 id="title">Ocean Contact Manager</h1>
 
-            <div id="updateContactForm" style="display: none; margin-top:10px">
-                <input type="text" id="updatefirstnameText" placeholder="First Name">
-                <input type="text" id="updatelastnameText" placeholder="Last Name">
-                <input type="text" id="updateemailText" placeholder="Email">
-                <input type="text" id="updatephoneText" placeholder="Phone Number">
-                <input type="text" id="updateaddressText" placeholder="Address">
-                <input type="text" id="updatenotesText" placeholder="Notes">
-
-                <input type="hidden" id="updateContactId" />
-
-                <button type="button" id="updateContactButton" class="buttons" onclick="updateContact();"> Submit </button><br />
-            
-                <span id="contactAddResult"></span>
-                <span id="contactUpdateResult"></span>
-            </div>
-        </div>
-
+        <!-- Logged in user controls -->
         <div id="loggedInDiv">
-            <span id="userName"></span><br />
-            <button type="button" id="logoutButton" class="buttons" onclick="doLogout();"> Log Out </button>
+            <span id="userName" role="status" aria-live="polite"></span>
+            <button type="button" id="logoutButton" class="buttons" onclick="doLogout();"
+                aria-label="Sign out of your account">
+                🚪 Sign out
+            </button>
         </div>
-        
-        </body>
-        </html>
+
+        <main id="accessUIDiv">
+            <!-- Search Section -->
+            <div class="card" >
+                <div class="search-section">
+                    <h2 class="section-title">Search Your Ocean</h2>
+                    <div class="search-container">
+                        <input type="text" id="searchText" placeholder="🔍 Search contacts by name, email, or phone..."
+                            aria-label="Search contacts" />
+                        <button type="button" id="searchContactButton" class="buttons" onclick="searchContact();"
+                            aria-describedby="contactSearchResult">
+                            🌊 Search Depths
+                        </button>
+                    </div>
+                    <span id="contactSearchResult" class="result-message" role="alert" aria-live="polite"></span>
+                </div>
+
+                <div id="contactListDisplay" role="region" aria-label="Contact list" aria-live="polite"></div>
+
+                <div id="updateContactForm" class="form-section" style="display:none; margin-top:10px"
+                    aria-label="Update contact form">
+                    <div class="form-grid">
+                        <input type="text" id="updatefirstnameText" placeholder="First Name"
+                            aria-label="Update First Name" />
+                        <input type="text" id="updatelastnameText" placeholder="Last Name"
+                            aria-label="Update Last Name" />
+                        <input type="email" id="updateemailText" placeholder="Email Address"
+                            aria-label="Update Email Address" />
+                        <input type="tel" id="updatephoneText" placeholder="Phone Number"
+                            aria-label="Update Phone Number" />
+                        <input type="text" id="updateaddressText" placeholder="Address" aria-label="Update Address" />
+                        <input type="text" id="updatenotesText" placeholder="Notes" aria-label="Update Notes" />
+                        <input type="hidden" id="updateContactId" />
+                    </div>
+                    <button type="button" id="updateContactButton" class="buttons" onclick="updateContact();"
+                        aria-describedby="contactUpdateResult">
+                        🌊 Update Ocean Record
+                    </button>
+                    <span id="contactUpdateResult" class="result-message" role="alert" aria-live="polite"></span>
+                </div>
+            </div>
+
+            <!-- Add / Update Section -->
+            <div class="card">
+                <h2 class="section-title add-contact">Add New Sea Creature</h2>
+                <button type="button" id="AddContactForm" class="buttons" onclick="Form();" aria-expanded="false"
+                    aria-controls="contactForm">
+                    🐠 Add New Contact
+                </button>
+
+                <!-- Add Contact Form -->
+                <div id="contactForm" class="form-section" style="display:none; margin-top:10px"
+                    aria-labelledby="AddContactForm">
+                    <div class="form-grid">
+                        <input type="text" id="firstnameText" placeholder="First Name" aria-label="First Name" />
+                        <input type="text" id="lastnameText" placeholder="Last Name" aria-label="Last Name" />
+                        <input type="email" id="emailText" placeholder="Email Address" aria-label="Email Address" />
+                        <input type="tel" id="phoneText" placeholder="Phone Number" aria-label="Phone Number" />
+                        <input type="text" id="addressText" placeholder="Address" aria-label="Address" />
+                        <input type="text" id="notesText" placeholder="Notes" aria-label="Notes" />
+                    </div>
+                    <button type="button" id="addContactButton" class="buttons" onclick="addContact();"
+                        aria-describedby="contactAddResult">
+                        🌊 Add to Ocean
+                    </button>
+                    <!--<span id="contactAddResult" class="result-message" role="alert" aria-live="polite"></span>-->
+                    <span id="contactAddResult"></span>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
 </html>

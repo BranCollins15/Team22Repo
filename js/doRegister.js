@@ -16,9 +16,29 @@ function doRegister()
 	let login = document.getElementById("user").value;
 	let password = document.getElementById("password").value;
 //	var hash = md5( password );
+	let errorMessage = "";
 	
-	document.getElementById("registerResult").innerHTML = "";
-
+	if(first === "")
+	{
+		errorMessage = errorMessage + "First Name Required<br>";
+	}
+	if(last === "")
+	{
+		errorMessage = errorMessage + "Last Name Required<br>";
+	}
+	if(login === "")
+	{
+		errorMessage = errorMessage + "Username Required<br>";
+	}
+	if(password === "")
+	{
+		errorMessage = errorMessage + "Password Required<br>";
+	}
+	document.getElementById("registerResult").innerHTML = errorMessage;
+	if(errorMessage !== "")
+	{
+		return;
+	}
 	let tmp = {firstName:first,lastName:last,login:login,passwordHash:password};
 //	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
@@ -39,7 +59,7 @@ function doRegister()
 		
 				if( jsonObject.error !== "" )
 				{		
-					document.getElementById("registerResult").innerHTML = "User/Password combination incorrect";
+					document.getElementById("registerResult").innerHTML = jsonObject.error;
 					return;
 				}
 		

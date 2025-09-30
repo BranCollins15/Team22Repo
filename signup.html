@@ -1,25 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ocean Signup - Join Our Aquatic Community</title>
 
-<html>
-    <head>
-        <script type="text/javascript" src="js/doRegister.js"></script>
-        <link rel="stylesheet" href="css/styles.css" />
-    </head>
-    
-    <form>
-        <label for = "first name"> firstName: </label><br>
-        <input type = "text" id = "firstname" name = "firstname"><br>
+  <!-- Keep your original behavior -->
+  <script src="js/doRegister.js" defer></script>
 
-        <label for = "last name"> lastName: </label><br>
-        <input type = "text" id = "lastname" name = "lastname"><br>
+  <!-- Ocean look & feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 
-        <label for = "user"> Username: </label><br>
-        <input type = "text" id="user" name="user"><br>
+<body class="centered-layout">
+  <a href="#firstname" class="skip-link">Skip to main content</a>
 
-        <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password">
+  <main>
+    <!-- Using the ocean form container/id; not required by your JS, but helpful for styling -->
+    <form id="signupDiv" class="ocean-signup" aria-labelledby="inner-title" novalidate onsubmit="return false;">
+      <h1 id="inner-title">Join Our Ocean Community</h1>
 
-        <button type="button" id="registerButton" class="buttons" onclick="doRegister();"> Do It </button>
-        <span id="registerResult"></span>
-        <a link href="index.html"> Already have an account? </a>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            placeholder="Your first name"
+            autocomplete="given-name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            placeholder="Your last name"
+            autocomplete="family-name"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="user">Username</label>
+        <input
+          type="text"
+          id="user"
+          name="user"
+          placeholder="Choose a unique username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button
+        type="button"
+        id="registerButton"
+        class="buttons"
+        onclick="doRegister();"
+        aria-describedby="registerResult"
+      >
+        🌊 Join the Ocean
+      </button>
+
+      <!-- Kept the same ID for your script; element type changed back to span to match your original markup -->
+      <!--<span id="registerResult" role="alert" aria-live="polite"></span>-->
+      <span id="registerResult"></span>
+      
+      <a href="index.html" class="login-link">
+        🏊‍♀️ Already swimming with us? Sign in here
+      </a>
     </form>
+  </main>
+</body>
 </html>
+

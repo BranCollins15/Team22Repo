@@ -17,7 +17,8 @@
 		$stmt->bind_param("ssss", $firstName, $lastName, $login, $passwordHash);
 		$stmt->execute();
 		if(($conn->affected_rows) == 0){
-			die("Error: Username Taken");
+			returnWithError("Username Taken");
+			exit();
 		}
 		$stmt->close();
 		$conn->close();

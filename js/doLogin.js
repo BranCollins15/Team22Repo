@@ -114,37 +114,66 @@ function addContact()
 	document.getElementById("contactAddResult").innerHTML = "";
 
 	let firstname = document.getElementById("firstnameText").value;
+	let firstnameError = document.getElementById("contactAddResult");
 	let lastname = document.getElementById("lastnameText").value;
+	let lastnameError = document.getElementById("contactAddResult");
 	let email = document.getElementById("emailText").value;
+	let emailError = document.getElementById("contactAddResult");
 	let phone = document.getElementById("phoneText").value;
+	let phoneError = document.getElementById("contactAddResult");
 	let address = document.getElementById("addressText").value;
 	let notes = document.getElementById("notesText").value;
+	let errorMessage = "";
+
 
 	if(firstname === "")
+		{
+			errorMessage = errorMessage + "First Name is required<br>";
+		} //else {
+			//firstnameError.innerText = ""; 
+		//}
+		if(lastname === "")
+		{
+			errorMessage = errorMessage + "Last Name is required<br>";
+		}
+		//else {
+		//	lastnameError.innerText = ""; 
+		//}
+		if(email === "")
+		{
+			errorMessage = errorMessage + "Email is required<br>";
+		}
+		else if (!email.includes("@")) {
+			errorMessage = errorMessage + "Invalid email format<br>";
+		}
+		//else {
+		//	emailError.innerText = ""; 
+		//}
+		if(phone === "")
+		{
+			errorMessage = errorMessage + "Phone Number is required<br>";
+
+		}
+		/*if(phone.length !== 12)
+		{
+			document.getElementById("contactAddResult").innerHTML = "Phone Number isn't long enough";
+			return;
+		}*/
+		else if (!phone.match(/^\d{3}-\d{3}-\d{4}$/)) {
+			errorMessage = errorMessage + "Phone must be in format XXX-XXX-XXXX<br>";
+		}//else {
+			//phoneError.innerText = ""; 
+		//}
+
+	firstnameError.innerHTML = errorMessage;
+	if(errorMessage !== "")
 	{
-		document.getElementById("contactAddResult").innerHTML = "required field";
 		return;
 	}
-	if(lastname === "")
-	{
-		document.getElementById("contactAddResult").innerHTML = "required field";
-		return;
-	}
-	if(email === "")
-	{
-		document.getElementById("contactAddResult").innerHTML = "required field";
-		return;
-	}
-	if(phone === "")
-	{
-		document.getElementById("contactAddResult").innerHTML = "required field";
-		return;
-	}
-	if(phone.length !== 12)
-	{
-		document.getElementById("contactAddResult").innerHTML = "required field";
-		return;
-	}
+	//if (hasError) {
+	//	return; // stop further processing since errors exist
+	//}
+	
 	// add if check to make sure the format matches XXX-XXX-XXXX
 	// also add if check to make sure email has @
 
@@ -171,7 +200,7 @@ function addContact()
 					document.getElementById("contactAddResult").innerHTML = "contact couldn't be added";
 					return;
 				}
-				document.getElementById("contactAddResult").innerHTML = "Contact has been added";
+				document.getElementById("contactAddResult").innerHTML = "Contact has been added!";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -203,7 +232,7 @@ function searchContact()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("contactSearchResult").innerHTML = "Contact(s) have been retrieved";
+				//document.getElementById("contactSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 				
 				if( jsonObject.error !== "" )
@@ -220,15 +249,28 @@ function searchContact()
 				
 				let contactDisplay = `
 					<div class="contact-entry" id="contact-${contactId}" style="margin-bottom:10px;">
-						<strong>${contact.FirstName} ${contact.LastName}</strong><br />
+						<strong 
+							style="cursor: pointer; color: blue;" 
+							onclick="toggleContactDetails(${contactId})"
+						>
+							${contact.FirstName} ${contact.LastName}
+						</strong><br />
 						Email: ${contact.Email}<br />
 						Phone: ${contact.Phone}<br />
+						
+						<!-- Hidden details -->
+						<div id="details-${contactId}" style="display: none; margin-top: 2px; ">
 						Address: ${contact.Address}<br />
 						Notes: ${contact.Notes}<br />
+						</div>
+						<div id="contactButtons">
 						<button onclick="deleteContact(${contactId})">Delete</button>
 						<button onclick="prefillForm(${contactId}, '${contact.FirstName}', '${contact.LastName}', '${contact.Email}', '${contact.Phone}', '${contact.Address}', '${contact.Notes}')">Update</button>
+						</div>
 					</div>
 				`;
+
+
 				contactList += contactDisplay;
 			
 
@@ -302,6 +344,7 @@ function prefillForm(id, firstName, lastName, email, phone, address, notes) {
 	document.getElementById("updateaddressText").value = address;
 	document.getElementById("updatenotesText").value = notes;
 
+	//document.getElementById("modalBackdrop").style.display = "block";
 	// Show the form if hidden
 	document.getElementById("updateContactForm").style.display = "block";
 
@@ -353,7 +396,7 @@ function updateContact()
 					document.getElementById("contactUpdateResult").innerHTML = "Contact couldn't be updated.";
 					return;
 				}
-				document.getElementById("contactUpdateResult").innerHTML = "Contact has been updated";
+				//document.getElementById("contactUpdateResult").innerHTML = "Contact has been updated";
 				searchContact(); 
 
 				document.getElementById("updateContactForm").style.display = "none";
@@ -372,9 +415,45 @@ function Form()
 	if(document.getElementById("contactForm").style.display === "block")
 	{
 		document.getElementById("contactForm").style.display = "none";
+
 	} 
 	else 
 	{
 		document.getElementById("contactForm").style.display = "block";
+		//document.getElementById("modalBackdrop").style.display = "block";
 	}
 }
+
+function toggleContactDetails(contactId) {
+	const details = document.getElementById(`details-${contactId}`);
+	if (details.style.display === "none") {
+		details.style.display = "block";
+	} else {
+		details.style.display = "none";
+	}
+}
+
+/*function prefillForm(contactId, firstName, lastName, email, phone, address, notes) {
+	document.getElementById("updateContactId").value = contactId;
+	document.getElementById("updatefirstnameText").value = firstName;
+	document.getElementById("updatelastnameText").value = lastName;
+	document.getElementById("updateemailText").value = email;
+	document.getElementById("updatephoneText").value = phone;
+	document.getElementById("updateaddressText").value = address;
+	document.getElementById("updatenotesText").value = notes;
+  
+	document.getElementById("modalBackdrop").style.display = "block";
+	document.getElementById("updateContactForm").style.display = "block";
+  }*/
+  
+	function hideUpdateForm() {
+		document.getElementById("updateContactForm").style.display = "none";
+		document.getElementById("modalBackdrop").style.display = "none";
+	  }
+
+	function hideAddForm(){
+		document.getElementById("contactForm").style.display = "none";
+		document.getElementById("modalBackdrop").style.display = "none";
+	}
+	  
+  

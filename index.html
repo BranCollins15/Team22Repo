@@ -1,21 +1,63 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	
-	<script type="text/javascript" src="js/doLogin.js"></script>
-    <link href="css/styles.css" rel="stylesheet">	
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ocean Login - Dive In</title>
+
+  <!-- Your original functionality -->
+  <script src="js/doLogin.js" defer></script>
+
+  <!-- Ocean style -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body>
+<body class="centered-layout">
 
-<div id="loginDiv">
-	<span id="inner-title">PLEASE LOG IN</span>
-	<input type="text" id="loginName" placeholder="Username" /><br />
-	<input type="password" id="loginPassword" placeholder="Password"/><br />
-	<button type="button" id="loginButton" class="buttons" onclick="doLogin();"> Do It </button>
-	<span id="loginResult"></span>
-  <a link href="signup.html"> Want to create an account? </a>
-</div>
+  <main>
+    <!-- Preserve original ID for JS; use Ocean form structure/styles -->
+    <form id="loginDiv" aria-labelledby="inner-title" novalidate onsubmit="doLogin(); return false;">
+      <h1 id="inner-title">PLEASE LOG IN</h1>
 
+      <div class="form-group">
+        <label for="loginName">Username</label>
+        <input
+          type="text"
+          id="loginName"
+          name="username"
+          placeholder="Username"
+          autocomplete="username"
+          aria-describedby="loginResult"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input
+          type="password"
+          id="loginPassword"
+          name="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          aria-describedby="loginResult"
+          required
+        />
+      </div>
+
+      <!-- Keep original button ID/class; Ocean styling applies via page CSS -->
+      <button type="submit" id="loginButton" class="buttons" aria-describedby="loginResult">
+        🌊 Dive In
+      </button>
+
+      <!-- Keep original result node for doLogin.js to update -->
+      <div id="loginResult" role="alert" aria-live="polite"></div>
+
+      <!-- Signup link, Ocean-styled -->
+      <a href="signup.html" class="signup-link">
+        🐠 New to our ocean? Create an account
+      </a>
+    </form>
+  </main>
 </body>
 </html>
