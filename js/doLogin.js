@@ -310,6 +310,7 @@ function deleteContact(contactid)
 				if (contactDiv) {
 					contactDiv.remove();
 				}
+				searchContact();
 			}
 		};
 		xhr.send(jsonPayload);
