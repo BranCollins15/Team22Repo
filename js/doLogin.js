@@ -13,12 +13,11 @@ function doLogin()
 	
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
-//	var hash = md5( password );
 	
 	document.getElementById("loginResult").innerHTML = "";
 
 	let tmp = {login:login,password:password};
-//	var tmp = {login:login,password:hash};
+
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + '/Login.' + extension;
@@ -93,10 +92,6 @@ function readCookie()
 	{
 		window.location.href = "index.html";
 	}
-	else
-	{
-//		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
-	}
 }
 
 function doLogout()
@@ -110,7 +105,6 @@ function doLogout()
 
 function addContact()
 {
-	//let newContact = document.getElementById("contactText").value;
 	document.getElementById("contactAddResult").innerHTML = "";
 
 	let firstname = document.getElementById("firstnameText").value;
@@ -127,57 +121,34 @@ function addContact()
 
 
 	if(firstname === "")
-		{
-			errorMessage = errorMessage + "First Name is required<br>";
-		} //else {
-			//firstnameError.innerText = ""; 
-		//}
-		if(lastname === "")
-		{
-			errorMessage = errorMessage + "Last Name is required<br>";
-		}
-		//else {
-		//	lastnameError.innerText = ""; 
-		//}
-		if(email === "")
-		{
-			errorMessage = errorMessage + "Email is required<br>";
-		}
-		else if (!email.includes("@")) {
-			errorMessage = errorMessage + "Invalid email format<br>";
-		}
-		//else {
-		//	emailError.innerText = ""; 
-		//}
-		if(phone === "")
-		{
-			errorMessage = errorMessage + "Phone Number is required<br>";
-
-		}
-		/*if(phone.length !== 12)
-		{
-			document.getElementById("contactAddResult").innerHTML = "Phone Number isn't long enough";
-			return;
-		}*/
-		else if (!phone.match(/^\d{3}-\d{3}-\d{4}$/)) {
-			errorMessage = errorMessage + "Phone must be in format XXX-XXX-XXXX<br>";
-		}//else {
-			//phoneError.innerText = ""; 
-		//}
+	{
+		errorMessage = errorMessage + "First Name is required<br>";
+	} 
+	if(lastname === "")
+	{
+		errorMessage = errorMessage + "Last Name is required<br>";
+	}
+	if(email === "")
+	{
+		errorMessage = errorMessage + "Email is required<br>";
+	}
+	else if (!email.includes("@")) {
+		errorMessage = errorMessage + "Invalid email format<br>";
+	}
+	if(phone === "")
+	{
+		errorMessage = errorMessage + "Phone Number is required<br>";
+	}
+	else if (!phone.match(/^\d{3}-\d{3}-\d{4}$/)) {
+		errorMessage = errorMessage + "Phone must be in format XXX-XXX-XXXX<br>";
+	}
 
 	firstnameError.innerHTML = errorMessage;
 	if(errorMessage !== "")
 	{
 		return;
 	}
-	//if (hasError) {
-	//	return; // stop further processing since errors exist
-	//}
-	
-	// add if check to make sure the format matches XXX-XXX-XXXX
-	// also add if check to make sure email has @
 
-	//console.log("UserId:", userId);
 	let tmp = {firstName: firstname, lastName: lastname, email: email, phone: phone, address: address, notes: notes, userId: userId};
 	let jsonPayload = JSON.stringify( tmp );
 
@@ -232,11 +203,11 @@ function searchContact()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				//document.getElementById("contactSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 				
 				if( jsonObject.error !== "" )
 					{		
+						document.getElementById("contactListDisplay").innerHTML = "";
 						document.getElementById("contactSearchResult").innerHTML = "contact couldn't be found";
 						return;
 					}
@@ -245,7 +216,7 @@ function searchContact()
 				{
 					
 				let contact = jsonObject.results[i];
-				let contactId = contact.ContactID; // adjust key if needed
+				let contactId = contact.ContactID;
 				
 				let contactDisplay = `
 					<div class="contact-entry" id="contact-${contactId}" style="margin-bottom:10px;">
@@ -272,13 +243,10 @@ function searchContact()
 
 
 				contactList += contactDisplay;
-			
-
-				document.getElementById("contactListDisplay").innerHTML = contactList;
 
 				}
+				document.getElementById("contactListDisplay").innerHTML = contactList;
 				
-				//document.getElementsByTagName("p")[0].innerHTML = contactList;
 			}
 		};
 		xhr.send(jsonPayload);
@@ -292,8 +260,6 @@ function searchContact()
 
 function deleteContact(contactid)
 {
-	// let deleteContact = document.getElementById("contactText").value;
-	// document.getElementById("contactDeleteResult").innerHTML = "";
 
 	let tmp = {contactId:contactid,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -317,15 +283,33 @@ function deleteContact(contactid)
 
 				if(jsonObject.error !== "")
 				{
-					//document.getElementById("contactDeleteResult").innerHTML = "Contact couldn't be deleted.";
 					return;
 				}
 
+				const updateForm = document.getElementById("updateContactForm");
+				const currentUpdateId = document.getElementById("updateContactId").value;
+
+				if (updateForm && updateForm.style.display === "block" && parseInt(currentUpdateId) === contactid) {
+
+					document.body.appendChild(updateForm); 
+					
+					updateForm.style.display = "none";
+
+					document.getElementById("updatefirstnameText").value = "";
+					document.getElementById("updatelastnameText").value = "";
+					document.getElementById("updateemailText").value = "";
+					document.getElementById("updatephoneText").value = "";
+					document.getElementById("updateaddressText").value = "";
+					document.getElementById("updatenotesText").value = "";
+					document.getElementById("updateContactId").value = "";
+					document.getElementById("contactUpdateResult").innerHTML = "";
+				}
+
 				let contactDiv = document.getElementById("contact-" + contactid);
+
 				if (contactDiv) {
 					contactDiv.remove();
 				}
-				//document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -337,45 +321,76 @@ function deleteContact(contactid)
 }
 
 function prefillForm(id, firstName, lastName, email, phone, address, notes) {
+	const form = document.getElementById("updateContactForm");
+
+	// Hide the form first to reset it
+	form.style.display = "none";
+
+	// Populate the form
 	document.getElementById("updatefirstnameText").value = firstName;
 	document.getElementById("updatelastnameText").value = lastName;
 	document.getElementById("updateemailText").value = email;
 	document.getElementById("updatephoneText").value = phone;
 	document.getElementById("updateaddressText").value = address;
 	document.getElementById("updatenotesText").value = notes;
-
-	//document.getElementById("modalBackdrop").style.display = "block";
-	// Show the form if hidden
-	document.getElementById("updateContactForm").style.display = "block";
-
-	// Optionally store the contact ID in a hidden field
 	document.getElementById("updateContactId").value = id;
-}
 
+	const contactDiv = document.getElementById("contact-" + id);
+
+	// Move form below the correct contact and show it
+	if (form && contactDiv) {
+		contactDiv.insertAdjacentElement('afterend', form);
+		form.style.display = "block";
+		// form.scrollIntoView({ behavior: 'smooth' });
+	}
+}
 
 function updateContact()
 {
-	//let updateContact = document.getElementById("updateContactText").value;
-	//document.getElementById("contactAddResult").innerHTML = "";
-	//if(!updateContact) return;
-	/*if(!contactid) 
-	{
-		document.getElementById("contactUpdateResult").innerHTML = "Missing contact ID.";
-		return;
-	}*/
-	
+	let updateContactResult = document.getElementById("contactUpdateResult");
+	updateContactResult.innerHTML = "";
+
+	let firstName = document.getElementById("updatefirstnameText").value;
+	let lastName = document.getElementById("updatelastnameText").value;
+	let email = document.getElementById("updateemailText").value;
+	let phone = document.getElementById("updatephoneText").value;
+
 	let data = {
-		firstName : document.getElementById("updatefirstnameText").value,
-		lastName : document.getElementById("updatelastnameText").value,
-		email : document.getElementById("updateemailText").value,
-		phone : document.getElementById("updatephoneText").value,
-		address : document.getElementById("updateaddressText").value,
-		notes : document.getElementById("updatenotesText").value,
-		userId : userId,
-		contactId : document.getElementById("updateContactId").value
+	firstName,
+	lastName,
+	email,
+	phone,
+	address: document.getElementById("updateaddressText").value,
+	notes: document.getElementById("updatenotesText").value,
+	userId: userId,
+	contactId: document.getElementById("updateContactId").value
+	};
+
+	let errorMessage = "";
+
+	if (firstName === "") {
+		errorMessage += "First Name is required<br>";
+	}
+	if (lastName === "") {
+		errorMessage += "Last Name is required<br>";
+	}
+	if (email === "") {
+		errorMessage += "Email is required<br>";
+	} else if (!email.includes("@")) {
+		errorMessage += "Invalid email format<br>";
+	}
+	if (phone === "") {
+		errorMessage += "Phone Number is required<br>";
+	} else if (!phone.match(/^\d{3}-\d{3}-\d{4}$/)) {
+		errorMessage += "Phone must be in format XXX-XXX-XXXX<br>";
 	}
 
-	//let tmp = {firstname: firstname, lastname: lastname, email: email, phone: phone};
+	updateContactResult.innerHTML = errorMessage;
+
+	if (errorMessage !== "") {
+	return;
+	}
+
 	let jsonPayload = JSON.stringify( data );
 
 	let url = urlBase + '/UpdateContacts.' + extension;
@@ -396,10 +411,22 @@ function updateContact()
 					document.getElementById("contactUpdateResult").innerHTML = "Contact couldn't be updated.";
 					return;
 				}
-				//document.getElementById("contactUpdateResult").innerHTML = "Contact has been updated";
-				searchContact(); 
+			
+				const updateForm = document.getElementById("updateContactForm");
+				updateForm.style.display = "none";
 
-				document.getElementById("updateContactForm").style.display = "none";
+				document.getElementById("accessUIDiv").appendChild(updateForm);
+
+				document.getElementById("updatefirstnameText").value = "";
+				document.getElementById("updatelastnameText").value = "";
+				document.getElementById("updateemailText").value = "";
+				document.getElementById("updatephoneText").value = "";
+				document.getElementById("updateaddressText").value = "";
+				document.getElementById("updatenotesText").value = "";
+				document.getElementById("updateContactId").value = "";
+				document.getElementById("contactUpdateResult").innerHTML = "";
+
+				searchContact(); 
 			}
 		};
 		xhr.send(jsonPayload);
@@ -415,12 +442,10 @@ function Form()
 	if(document.getElementById("contactForm").style.display === "block")
 	{
 		document.getElementById("contactForm").style.display = "none";
-
 	} 
 	else 
 	{
 		document.getElementById("contactForm").style.display = "block";
-		//document.getElementById("modalBackdrop").style.display = "block";
 	}
 }
 
@@ -432,28 +457,3 @@ function toggleContactDetails(contactId) {
 		details.style.display = "none";
 	}
 }
-
-/*function prefillForm(contactId, firstName, lastName, email, phone, address, notes) {
-	document.getElementById("updateContactId").value = contactId;
-	document.getElementById("updatefirstnameText").value = firstName;
-	document.getElementById("updatelastnameText").value = lastName;
-	document.getElementById("updateemailText").value = email;
-	document.getElementById("updatephoneText").value = phone;
-	document.getElementById("updateaddressText").value = address;
-	document.getElementById("updatenotesText").value = notes;
-  
-	document.getElementById("modalBackdrop").style.display = "block";
-	document.getElementById("updateContactForm").style.display = "block";
-  }*/
-  
-	function hideUpdateForm() {
-		document.getElementById("updateContactForm").style.display = "none";
-		document.getElementById("modalBackdrop").style.display = "none";
-	  }
-
-	function hideAddForm(){
-		document.getElementById("contactForm").style.display = "none";
-		document.getElementById("modalBackdrop").style.display = "none";
-	}
-	  
-  

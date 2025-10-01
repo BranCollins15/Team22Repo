@@ -15,7 +15,7 @@ function doRegister()
 	let last = document.getElementById("lastname").value;
 	let login = document.getElementById("user").value;
 	let password = document.getElementById("password").value;
-//	var hash = md5( password );
+
 	let errorMessage = "";
 	
 	if(first === "")
@@ -40,7 +40,7 @@ function doRegister()
 		return;
 	}
 	let tmp = {firstName:first,lastName:last,login:login,passwordHash:password};
-//	var tmp = {login:login,password:hash};
+
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + '/SignUp.' + extension;
@@ -55,18 +55,12 @@ function doRegister()
 			if (this.readyState == 4 && this.status == 200) 
 			{
 				let jsonObject = JSON.parse( xhr.responseText );
-				// userId = jsonObject.id;
 		
 				if( jsonObject.error !== "" )
 				{		
 					document.getElementById("registerResult").innerHTML = jsonObject.error;
 					return;
 				}
-		
-				// firstName = jsonObject.firstName;
-				// lastName = jsonObject.lastName;
-
-				// saveCookie();
 	
 				window.location.href = "index.html";
 			}
@@ -114,10 +108,6 @@ function readCookie()
 	if( userId < 0 )
 	{
 		window.location.href = "index.html";
-	}
-	else
-	{
-//		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
 	}
 }
 
